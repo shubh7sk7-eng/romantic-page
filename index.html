@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For Someone Special❤️</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', cursive;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.35);
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 650px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 2s ease;
+    }
+
+    h1 { font-size: 2.3rem; margin-bottom: 10px; }
+
+    p {
+      font-size: 1.25rem;
+      line-height: 1.7;
+      min-height: 120px;
+    }
+
+    .teddy img {
+      width: 120px;
+      margin: 10px auto;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    button, select {
+      margin: 10px 6px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    button { background: #ff4d6d; color: white; }
+
+    .option-btn {
+      background: #fff;
+      color: #ff4d6d;
+      font-weight: bold;
+      position: relative;
+    }
+
+    .option-btn.no { position: absolute; }
+
+    select { background: white; color: #333; }
+
+    video {
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+
+    .hearts span {
+      position: absolute;
+      bottom: -20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 20px;
+      animation: floatUp 6s infinite;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>FOR SOMEONE SPECIAL💕</h1>
+    <p id="message"></p>
+
+    <!-- 🧸 Cute Teddy -->
+    <div class="teddy">
+      <img src="teddy.png" alt="Cute Teddy" />
+    </div>
+
+    <div id="controls"></div>
+
+    <audio id="audioPlayer" controls style="margin-top:15px; width:100%; display:none;"></audio>
+    <select id="songSelector" style="display:none" onchange="changeSong()"></select>
+
+    <video id="danceVideo" controls loop style="display:none">
+      <source src="Video.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+  <script>
+    // ❤️ 5 FIXED MESSAGES ❤️
+    const messages = [
+      "Every time I think of you, my world feels softer and brighter.",
+      "You make ordinary moments feel special just by being you.",
+      "Some people feel like home, and somehow… you are mine.",
+      "If my heart had a favorite place, it would always be next to you.",
+      "There’s a quiet happiness in knowing you exist in my life."
+    ];
+
+    // 🎵 SONGS (GitHub Pages compatible – RELATIVE PATHS ONLY) 🎵
+    // Put MP3 files in the SAME folder as index.html
+    const songs = [
+      { name: "For you! 💖", src: "perfect_edsheeran.mp3" }
+      // Add more like this:
+      // { name: "Our Song 💞", src: "oursong.mp3" }
+    ];
+
+    let step = 0;
+    const messageEl = document.getElementById("message");
+    const controls = document.getElementById("controls");
+    const audioPlayer = document.getElementById("audioPlayer");
+    const songSelector = document.getElementById("songSelector");
+    const danceVideo = document.getElementById("danceVideo");
+
+    function nextStep() {
+      if (step < messages.length) {
+        messageEl.textContent = messages[step];
+        controls.innerHTML = `<button onclick="nextStep()">Next 💌</button>`;
+        step++;
+      } else if (step === messages.length) {
+        askQuestion("Can I ask you a question?");
+        step++;
+      }
+    }
+
+    function askQuestion(text) {
+      messageEl.textContent = text;
+      controls.innerHTML = `
+        <button class="option-btn" onclick="yesFirst()">Yes 💕</button>
+        <button class="option-btn no" id="noBtn">No 🙈</button>
+      `;
+      moveNoButton();
+    }
+
+    function moveNoButton() {
+      const noBtn = document.getElementById("noBtn");
+      noBtn.addEventListener("mouseover", () => {
+        noBtn.style.left = Math.random() * 200 - 100 + "px";
+        noBtn.style.top = Math.random() * 100 - 50 + "px";
+      });
+    }
+
+    function yesFirst() { askFinal(); }
+
+    function askFinal() {
+      messageEl.textContent = "Can you come on a worth remembering date with me? 💖";
+      controls.innerHTML = `
+        <button class="option-btn" onclick="finalYes()">Yes 😍</button>
+        <button class="option-btn no" id="noBtn">No 🙈</button>
+      `;
+      moveNoButton();
+    }
+
+    function finalYes() {
+      messageEl.textContent = "You just made my heart dance 💃🕺";
+      controls.innerHTML = "";
+
+      songSelector.innerHTML = "";
+      songs.forEach((song, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = song.name;
+        songSelector.appendChild(option);
+      });
+
+      audioPlayer.src = songs[0].src;
+      audioPlayer.style.display = "block";
+      songSelector.style.display = "block";
+      audioPlayer.play();
+
+      danceVideo.style.display = "block";
+      danceVideo.play();
+    }
+
+    function changeSong() {
+      audioPlayer.src = songs[songSelector.value].src;
+      audioPlayer.play();
+    }
+
+    function createHearts() {
+      const heart = document.createElement("span");
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+      document.getElementById("hearts").appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHearts, 400);
+
+    nextStep();
+  </script>
+
+</body>
+</html>
